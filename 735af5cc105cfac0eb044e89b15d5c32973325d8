@@ -1,0 +1,25 @@
+ag-ui-wss/src/cli.ts
+  19f367a43d21d701 96,118,180-181,184,192-193,201,286-287,313-315,321,323
+ag-ui-wss/package.json
+  19f367a43d21d701 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.32",
+  "base_commit_sha": "735af5cc105cfac0eb044e89b15d5c32973325d8",
+  "prompts": {
+    "19f367a43d21d701": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "97b76657-ccb0-4264-b140-da9a3f25a6c6",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Dao Hoang Son <daohoangson@gmail.com>",
+      "messages": [],
+      "total_additions": 28,
+      "total_deletions": 16,
+      "accepted_lines": 16,
+      "overriden_lines": 1
+    }
+  }
+}
