@@ -175,6 +175,8 @@ async function sendMessage(config: Config, message: string): Promise<void> {
 // Event processing
 // ---------------------------------------------------------------------------
 let processedEventCount = 0;
+let startTime = 0;
+let firstTokenTime = 0;
 
 function handleEvents(
   payload: Payload,
@@ -204,7 +206,10 @@ function handleEvents(
 
     switch (event.type) {
       case "TEXT_MESSAGE_CONTENT":
-        if (event.delta) process.stdout.write(event.delta);
+        if (event.delta) {
+          if (!firstTokenTime) firstTokenTime = performance.now();
+          process.stdout.write(event.delta);
+        }
         break;
       case "TOOL_CALL_START":
         if (event.toolCallName)
@@ -287,12 +292,28 @@ program
             stompClient = client;
             console.error(chalk.dim("Sending..."));
             console.error();
+            startTime = performance.now();
             sendMessage(config, message).catch(reject);
           })
           .catch(reject);
       });
 
       await done;
+
+      const totalMs = performance.now() - startTime;
+      const ttftMs = firstTokenTime ? firstTokenTime - startTime : null;
+      const fmt = (ms: number) =>
+        ms >= 1000 ? `${(ms / 1000).toFixed(1)}s` : `${Math.round(ms)}ms`;
+      console.error(
+        chalk.dim(
+          [
+            ttftMs != null ? `TTFT: ${fmt(ttftMs)}` : null,
+            `Total: ${fmt(totalMs)}`,
+          ]
+            .filter(Boolean)
+            .join("  |  "),
+        ),
+      );
     } catch (err) {
       const message =
         err instanceof Error
