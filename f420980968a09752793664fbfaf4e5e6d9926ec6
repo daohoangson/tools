@@ -1,0 +1,40 @@
+README.md
+  19f367a43d21d701 1-7,9
+ag-ui-wss/package.json
+  19f367a43d21d701 3,5-9
+ag-ui-wss/README.md
+  19f367a43d21d701 1-31,33-63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.32",
+  "base_commit_sha": "f420980968a09752793664fbfaf4e5e6d9926ec6",
+  "prompts": {
+    "19f367a43d21d701": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "97b76657-ccb0-4264-b140-da9a3f25a6c6",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Dao Hoang Son <daohoangson@gmail.com>",
+      "messages": [],
+      "total_additions": 80,
+      "total_deletions": 6,
+      "accepted_lines": 77,
+      "overriden_lines": 2
+    },
+    "8e1e6a4ee6cf4861": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d9baa3e2-c27d-4e73-afb8-c34e58b41769",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Dao Hoang Son <daohoangson@gmail.com>",
+      "messages": [],
+      "total_additions": 43,
+      "total_deletions": 1,
+      "accepted_lines": 40,
+      "overriden_lines": 0
+    }
+  }
+}
