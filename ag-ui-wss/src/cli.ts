@@ -174,7 +174,6 @@ async function sendMessage(config: Config, message: string): Promise<void> {
 // ---------------------------------------------------------------------------
 // Event processing
 // ---------------------------------------------------------------------------
-let processedEventCount = 0;
 let startTime = 0;
 let firstTextTime = 0;
 let firstToolTime = 0;
@@ -199,8 +198,7 @@ function handleEvents(
     return "running";
   }
 
-  const newEvents = events.slice(processedEventCount);
-  processedEventCount = events.length;
+  const newEvents = events;
   for (const e of newEvents) newBytes += JSON.stringify(e).length;
 
   let status: "running" | "finished" | "error" = "running";
@@ -279,8 +277,6 @@ program
     let stompClient: Client | undefined;
 
     try {
-      processedEventCount = 0;
-
       const done = new Promise<void>((resolve, reject) => {
         const idleThreshold = config.IDLE_TIMEOUT * 0.25;
         const onIdle = () =>
