@@ -180,6 +180,7 @@ let firstToolTime = 0;
 let conversationBytes = 0;
 let newBytes = 0;
 let lastEventTime = 0;
+let printedText = "";
 const idlePeriods: { startMs: number; durationMs: number }[] = [];
 
 function handleEvents(
@@ -212,12 +213,21 @@ function handleEvents(
     const event = parsed.data;
 
     switch (event.type) {
-      case "TEXT_MESSAGE_CONTENT":
-        if (event.delta) {
+      case "TEXT_MESSAGE_CONTENT": {
+        const snapshot = event.content ?? event.delta;
+        if (snapshot) {
           if (!firstTextTime) firstTextTime = performance.now();
-          process.stdout.write(event.delta);
+          if (snapshot.startsWith(printedText)) {
+            const newPart = snapshot.slice(printedText.length);
+            if (newPart) process.stdout.write(newPart);
+            printedText = snapshot;
+          } else {
+            process.stdout.write(snapshot);
+            printedText = snapshot;
+          }
         }
         break;
+      }
       case "TOOL_CALL_START":
         if (!firstToolTime) firstToolTime = performance.now();
         if (event.toolCallName)
