@@ -18,6 +18,7 @@ Object.assign(globalThis, { WebSocket });
 const eventSchema = z.object({
   type: z.string(),
   delta: z.string().optional(),
+  toolCallId: z.string().optional(),
   toolCallName: z.string().optional(),
   content: z.string().optional(),
   error: z.string().optional(),
@@ -181,6 +182,8 @@ let conversationBytes = 0;
 let newBytes = 0;
 let lastEventTime = 0;
 let printedText = "";
+const seenToolStarts = new Set<string>();
+const seenToolResults = new Set<string>();
 const idlePeriods: { startMs: number; durationMs: number }[] = [];
 
 function handleEvents(
@@ -228,12 +231,19 @@ function handleEvents(
         }
         break;
       }
-      case "TOOL_CALL_START":
+      case "TOOL_CALL_START": {
+        const tcId = event.toolCallId ?? "";
+        if (tcId && seenToolStarts.has(tcId)) break;
+        if (tcId) seenToolStarts.add(tcId);
         if (!firstToolTime) firstToolTime = performance.now();
         if (event.toolCallName)
           process.stdout.write(chalk.dim(`\n[tool: ${event.toolCallName}] `));
         break;
-      case "TOOL_CALL_RESULT":
+      }
+      case "TOOL_CALL_RESULT": {
+        const tcId = event.toolCallId ?? "";
+        if (tcId && seenToolResults.has(tcId)) break;
+        if (tcId) seenToolResults.add(tcId);
         if (event.content) {
           const preview =
             event.content.length > 200
@@ -242,6 +252,7 @@ function handleEvents(
           process.stdout.write(chalk.dim(`→ ${preview}\n`));
         }
         break;
+      }
       case "RUN_FINISHED":
         status = "finished";
         break;
